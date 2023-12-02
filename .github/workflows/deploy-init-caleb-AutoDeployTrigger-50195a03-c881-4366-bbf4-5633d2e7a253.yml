@@ -7,17 +7,15 @@ on:
     branches: 
       [ main ]
     paths:
-    - 'testDir/app/**'
-    - '.github/workflows/deploy-init-caleb-AutoDeployTrigger-8bb81d57-cc16-4520-803b-fd469d0fb650.yml'
+    - 'app/**'
+    - '.github/workflows/deploy-init-caleb-AutoDeployTrigger-50195a03-c881-4366-bbf4-5633d2e7a253.yml'
 
   # Allow manual trigger 
-  workflow_dispatch:      
-
+  workflow_dispatch:
+      
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
 
     steps:
       - name: Checkout to the branch
@@ -26,14 +24,12 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.DEPLOYINITCALEB_AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.DEPLOYINITCALEB_AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.DEPLOYINITCALEB_AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.DEPLOYINITCALEB_AZURE_CREDENTIALS }}
 
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}/testDir/app 
+          appSourcePath: ${{ github.workspace }}/app 
           registryUrl: calebregistry.azurecr.io
           registryUsername: ${{ secrets.DEPLOYINITCALEB_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.DEPLOYINITCALEB_REGISTRY_PASSWORD }}
@@ -42,4 +38,5 @@ jobs:
           imageToBuild: calebregistry.azurecr.io/deploy-init-caleb:${{ github.sha }}
           dockerfilePath: Dockerfile
 
+     
 
