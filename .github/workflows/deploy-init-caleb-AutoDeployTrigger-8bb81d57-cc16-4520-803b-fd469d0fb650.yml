@@ -40,6 +40,6 @@ jobs:
           containerAppName: deploy-init-caleb
           resourceGroup: caleb-test-RG
           imageToBuild: calebregistry.azurecr.io/deploy-init-caleb:${{ github.sha }}
-          dockerfilePath: Dockerfile
+          dockerfilePath: app.Dockerfile
 
 
