@@ -1,0 +1,42 @@
+name: Trigger auto deployment for deploy-init-caleb
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - 'app/**'
+    - '.github/workflows/deploy-init-caleb-AutoDeployTrigger-50195a03-c881-4366-bbf4-5633d2e7a253.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.DEPLOYINITCALEB_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}/app 
+          registryUrl: calebregistry.azurecr.io
+          registryUsername: ${{ secrets.DEPLOYINITCALEB_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.DEPLOYINITCALEB_REGISTRY_PASSWORD }}
+          containerAppName: deploy-init-caleb
+          resourceGroup: caleb-test-RG
+          imageToBuild: calebregistry.azurecr.io/deploy-init-caleb:${{ github.sha }}
+          dockerfilePath: Dockerfile
+
+     
+
