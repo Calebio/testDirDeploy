@@ -1,0 +1,16 @@
+location: germanywestcentral
+properties:
+  configuration:
+    activeRevisionsMode: Multiple
+  ingress:
+    external: true
+    allowInsecure: false
+    targetPort: 80
+    traffic:
+      - latestRevision: true
+        weight: 100
+    transport: Auto
+template:
+scale:
+  minReplicas: 1
+  maxReplicas: 3

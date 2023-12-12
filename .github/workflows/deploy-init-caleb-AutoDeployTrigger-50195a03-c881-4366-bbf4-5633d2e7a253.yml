@@ -5,7 +5,7 @@ on:
   # Automatically trigger it when detected changes in repo
   push:
     branches: 
-      [ main-release ]
+      [ main ]
     paths:
     - 'app/**'
     - '.github/workflows/deploy-init-caleb-AutoDeployTrigger-50195a03-c881-4366-bbf4-5633d2e7a253.yml'
